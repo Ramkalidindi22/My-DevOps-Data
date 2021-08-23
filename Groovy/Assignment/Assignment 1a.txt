@@ -1,0 +1,7 @@
+1. Number Data Types
+a. What data type is the number 2?
+
+int a=2.0
+println a
+o/p:
+2

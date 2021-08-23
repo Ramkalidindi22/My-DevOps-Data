@@ -1,0 +1,35 @@
+
+5. Prime Numbers Write a method called isPrime that takes an integer argument and returns a boolean. Determine whether the number is prime by dividing it by all numbers from 2 up to one less than the number. That limit is too high, of course. How high do you have to check to be sure whether you've gone far enough?
+
+def Prime(num) {
+    i=2
+    count=0
+    while(i<num) {
+        if (num%i==0) {
+            count=count+1
+            if (count==1) {
+                return false
+            }
+        }
+        i=i+1
+    }
+    return true
+ }
+
+ print "enter the num: "
+ num=System.console().readLine()
+ number=n um as Integer
+ result=Prime(number)
+ if (result) {
+     println "yes $num prime number"
+ }
+ else {
+println "$num is not a prime number"
+}
+
+o/p:
+enter the num: 2
+yes 2 prime number
+
+enter the num: 10
+10 is not a primenumber

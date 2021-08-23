@@ -1,0 +1,14 @@
+1. Sorting Strings Create a list of strings. Sort them alphabetically. Sort them by length. Sort them by length in descending order. Advanced: Sort by length, then sort equal length strings alphabetically
+
+def words = ["Red","Blue","Green","Yellow","Orange"]
+words=words.sort()
+println words
+words = words.sort { it.size() }
+println words
+words = words.sort { -it.size() }
+println words
+
+o/p:
+[Blue, Green, Orange, Red, Yellow]
+[Red, Blue, Green, Orange, Yellow]
+[Orange, Yellow, Green, Blue, Red]

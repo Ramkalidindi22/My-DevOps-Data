@@ -1,0 +1,163 @@
+4. Create Ghost module
+Create a directory called ghost.
+Your modules will be made up of three files: main.tf, variables.tf and outputs.tf.
+
+main.tf
+In main.tf you will deploy out two resources docker_image and docker_container. The docker_image resource name will be ghost_image.
+The name will use th image_name variable.
+The docker_container resource name will be ghost_container.
+The name will be set using a varialbe called container_name. The image will be set usingdocker_image.ghost_image.latest. Set the external port to use the ext_port variable.
+
+variables.tf
+In variables.tf create three varialbes: image_name, container_name and ext_port.
+
+outputs.tf
+In outputs.tf create two outputs: ip and container_name. The ip output the ghost_container's ip_address attribute.
+The container_name output the ghost_container's name attribute.
+
+Create root module
+main.tf
+In cloud_user directory create main.tf, variables.tf and outputs.tf. In main.tf will use the ghost module.
+Set image_name using a variable called image_name.
+Set container_name using a variable called container_name.
+Set ext_port using a variable called ext_port.
+In variables.tf create three image_name, container_name and ext_port.
+
+variables.tf
+The image_name will have a default value of ghost:latest with a description of Image for container.
+The container_name will have a default value of blogwith a description ofName of the container.  
+Theext_portwill have adefaultvalue of 80 with a description of External port for container.
+
+outputs.tf
+In outputs.tf create two outputs: ip and container_name. The ip output the ghost_container's ip_address attribute.
+The container_name output the ghost_container's name attribute.
+
+Deploy the infrastructure
+Initialize Terraform.
+Generate a Terraform plan and output a plan file.
+Deploy the infrastructure using the plan file.
+
+A.
+$ mkdir gost
+-->main.tf
+terraform {
+    required_providers {
+        docker = {
+            source = "kreuzwerker/docker"
+            version = "2.12.0"
+        }
+    }
+}
+
+
+provider "docker" {
+    host = "npipe:////.//pipe//docker_engine"
+}
+# Download the Ghost Image 
+resource "docker_image" "ghost_image" {
+    name = "${var.image_name}" 
+}
+
+
+# Start the Ghost Container
+resource "docker_container" "ghost_container" { 
+    name = "${var.container_name}" 
+    image = "${docker_image.ghost_image.latest}" 
+    ports {
+        internal = "2368"
+        external = "${var.ext_port}"
+    }
+}
+
+-->variables.tf
+#Define variables
+variable "image_name" {
+    default = "ghost:latest"
+}
+
+variable "container_name" {
+    default = "ghost_blog"
+}
+
+variable "ext_port" {
+    default = "80"
+}
+
+-->outputs.tf
+#Output the IP Address of the Container
+output "ip" {
+    value = "${docker_container.ghost_container.ip_address}"
+} 
+
+output "container_name" {
+    value = "${docker_container.ghost_container.name}"
+}
+
+$ terraform init
+$ terraform plan -out "asst4_ghost.tfplan"
+$ terraform apply "asst4_ghost.tfplan"
+docker_image.ghost_image: Creating...
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+container_name = "ghost_blog"
+ip = "172.18.0.2"
+
+-->main.tf
+module "ghost" {
+    source = "Desktop:/Terraform assignment/Asst4/ghost"
+    image_name = "${var.image_name}"
+    container_name = "${var.container_name}"
+    ext_port = "${var.ext_port}"
+}
+
+-->variables.tf
+#Define variables
+variable "image_name" {
+    default = "ghost:latest"
+}
+
+
+variable "container_name" {
+    default = "blog"
+} 
+
+
+variable "ext_port" {
+    default = "9090"
+}
+
+-->outputs.tf
+#Output the IP Address of the Container
+output "ip" {
+    value = "${module.ghost.ip}"
+}
+
+
+output "container_name" {
+    value = "${module.ghost.container_name}"
+}
+
+$ terraform init
+$ terraform plan -out "asst4_root.tfplan"
+$ terraform apply "asst4_root.tfplan"
+
+Outputs:
+
+container_name = "blog"
+ip = "172.18.0.4"
+
+
+
+
+
+
+
+
+
+
+
+
+

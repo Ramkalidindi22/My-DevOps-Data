@@ -1,0 +1,8 @@
+4. Closures as a filter Create a list of numbers. Print all elements greater than zero.
+
+def lst=[-1,-2,3,4,5,0,6,7,8,9]
+def closures=lst.findAll{item -> item >0}
+println closures
+
+o/p:
+[3, 4, 5, 6, 7, 8, 9]   

@@ -1,0 +1,132 @@
+2. Create a new Terraform file called main.tf.
+Create three variables.
+The first variable, called image_name, needs to be set to ghost:latest.
+The second variable is called container_name with a default of ghost_blog.
+The final variable is called ext_port and set the default to port 80.
+
+Create a Docker image resource called ghost_image that uses the image_name variable.
+
+Create a Docker container resource called ghost_container.
+The name will use the container_name variable.
+The image will use the ghost_image resource.
+The internal port will be set to 2368.
+The external port will use ext_port variable.
+
+Initialize Terraform.
+
+Create a Terraform plan that uses the following variables:
+
+container_name = ghost_blog1
+image_name = ghost:alpine
+ext_port = 8080
+Output the plan to a file called tfplan.
+
+Then apply the plan using tfplan and make sure that the apply doesn’t prompt for input.
+
+A.
+Create the Ghost Module:
+___________________________
+
+-->Create the ghost directory and transfer into it.
+mkdir ghost cd ghost/
+
+-->Create and edit main.tf
+vi main.tf
+
+-->Add the following text to the file
+resource "docker_image" "ghost_image" {
+   name = var.image_name 
+}
+resource "docker_container" "ghost_container" {
+   name = var.container_name
+   image = docker_image.ghost_image.latest 
+     ports { 
+         internal = "2368" 
+         external = var.ext_port 
+} 
+}
+Save the changes and exit the editor.
+
+-->Create and edit variables.tf
+vi variables.tf
+
+-->Add the following text to the file.
+variable "image_name" {} 
+variable "container_name" {} 
+variable "ext_port" {}
+Save the changes and exit the editor.
+
+-->Create and edit outputs.tf
+vi outputs.tf
+   
+-->Add the following text to the file.
+output "ip" { 
+value = docker_container.ghost_container.ip_address
+}
+output "container_name" {
+value = docker_container.ghost_container.name 
+}
+Save the changes and exit the editor.
+
+Create the Root Module:
+_______________________
+
+-->Transfer to a higher directory
+cd ../
+
+-->Create and edit main.tf
+vi main.tf
+
+-->Add the following text to the file.
+`bash module "ghost" {
+source = "./ghost" 
+image_name = var.image_name
+container_name = var.container_name
+ext_port = var.ext_port
+}
+Save the changes and exit the editor.
+
+-->Create and edit variables.tf.
+vi variables.tf
+
+-->Add the following text to the file
+variable "image_name" {
+description = "Image for container"
+default = "ghost:latest" 
+}
+variable "container_name" {
+description = "Name of the container"
+default = "blog1" 
+}
+variable "ext_port" {
+description = "External port for container"
+default = "80" 
+}
+Save the changes and exit the editor
+
+-->Create and edit outputs.tf
+vi outputs.tf
+
+-->Add the following text to the file
+output "ip" {
+value = module.ghost.ip 
+} 
+output "container_name" { 
+value = module.ghost.container_name 
+}
+Save the changes and exit the editor
+
+Deploy the Infrastructure:
+__________________________
+
+-->Initialize Terraform.
+terraform init
+
+-->Generate a Terraform plan.
+terraform plan -out=tfplan -var image_name=ghost:alpine -var ext_port=8080
+
+-->deploy the infrastructure using the plan file.
+terraform apply tfplan
+
+-->Open a browser and navigate to the public IP address on port 8080
+PUBLIC_IP_ADDRESS:8080

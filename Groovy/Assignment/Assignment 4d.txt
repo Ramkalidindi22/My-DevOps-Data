@@ -1,0 +1,19 @@
+4d. Define a string variable containing the sentence, "Hello, World. How are you?". Split the sentence into an array using the split method. Count the number of words. Do the same using the tokenize method.
+
+def str = "Hello, World. How are you?"
+println str.split("")
+
+println str.length()
+
+o/p:
+[H, e, l, l, o, ,,  , W, o, r, l, d, .,  , H, o, w,  , a, r, e,  , y, o, u, ?]
+26
+
+def str = "Hello, World. How are you?"
+println str.tokenize()
+
+println str.length()
+
+o/p:
+[Hello,, World., How, are, you?]
+26

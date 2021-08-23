@@ -1,0 +1,11 @@
+
+b. Declare a variable x of type def and assign it the sum of 1 and 1.5. What is the resulting data type?
+
+def a=1
+def b=1.5
+float x=a+b
+
+println x
+
+o/p:
+2.5

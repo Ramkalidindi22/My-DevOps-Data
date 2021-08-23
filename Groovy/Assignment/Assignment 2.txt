@@ -1,0 +1,38 @@
+c. What do you get when you divide 5 by 2? What is the resulting data type? If you wanted to do integer division (no remainder), what method would you call?
+
+println("Integer Datatype values...")
+println("Min = " + Integer.MIN_VALUE)
+println("Max = " + Integer.MAX_VALUE)
+
+println("Float Datatype values...")
+println("Min = " + Float.MIN_VALUE)
+println("Max = " + Float.MAX_VALUE)
+
+println("Double Datatype values...")
+println("Min = " + Double.MIN_VALUE)
+println("Max = " + Double.MAX_VALUE)
+
+println("Byte Datatype values...")
+println("Min = " + Byte.MIN_VALUE)
+println("Max = " + Byte.MAX_VALUE)
+
+println("Short Datatype values...")
+println("Min = " + Short.MIN_VALUE)
+println("Max = " + Short.MAX_VALUE)
+
+o/p:
+Integer Datatype values...
+Min = -2147483648
+Max = 2147483647
+Float Datatype values...
+Min = 1.4E-45
+Max = 3.4028235E38
+Double Datatype values...
+Min = 4.9E-324
+Max = 1.7976931348623157E308
+Byte Datatype values...
+Min = -128
+Max = 127
+Short Datatype values...
+Min = -32768
+Max = 32767

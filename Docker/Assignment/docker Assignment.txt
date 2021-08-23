@@ -1,0 +1,378 @@
+Assignment
+
+NOTE: Do not forget to see manual page using "--help" option in command when searching for options/commands for a particular task.
+
+1. Install Docker, either on your native OS or on a VM. Make sure it runs. Type "docker -v" to check if it's installed.
+
+C:\Users\ramka>docker --version
+Docker version 20.10.0, build 7287ab3
+
+2. Find a image from dockerhub of your choice(recommeded: nginx), don't use browser, pull the official image from dockerhub
+
+C:\Users\ramka>docker pull nginx
+Using default tag: latest
+latest: Pulling from library/nginx
+Digest: sha256:8f335768880da6baf72b70c701002b45f4932acae8d574dedfddaf967fc3ac90
+Status: Image is up to date for nginx:latest
+docker.io/library/nginx:latest
+
+
+3. List all the available images in your machine/vm, make sure you see recently pulled image in the list.
+
+C:\Users\ramka>docker images
+REPOSITORY        TAG         IMAGE ID       CREATED        SIZE
+ubuntu            latest     131b700e415     10days ago     72.8mb
+
+4. Find out the "Full" ImageId of the image that you pulled and write it below.
+
+docker inspect 08b152afcfae
+"Id": "sha256:08b152afcfae220e9709f00767054b824361c742ea03a9fe936271ba520a0a4b"
+
+5. Create a container of your image 
+C:\Users\ramka>docker run -d -p 8080:80 --name nginx 08b152afcfae
+72916128dfb9b807523aca02f298d43c76312caca5e50600dcb7b4e2998b12b1
+
+6. List all the running containers
+
+C:\Users\ramka>docker ps
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS         PORTS                                   NAMES
+72916128dfb9   08b152afcfae   "/docker-entrypoint.…"   17 seconds ago   Up 6 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   nginx
+
+7. List all the running and stopped containers 
+
+C:\Users\ramka>docker ps -a
+CONTAINER ID   IMAGE             COMMAND                  CREATED              STATUS                    PORTS                                   NAMES
+72916128dfb9   08b152afcfae      "/docker-entrypoint.…"   About a minute ago   Up About a minute         0.0.0.0:8080->80/tcp, :::8080->80/tcp   nginx
+66867b706da6   a5c24d1d92e7      "echo 'Hello world f…"   2 days ago           Exited (0) 2 days ago                                             adoring_roentgen
+ac0033826b01   jenkins/jenkins   "/sbin/tini -- /usr/…"   3 days ago           Exited (143) 3 days ago                                           bold_brown
+18755965ddb7   hello-world       "/hello"                 4 days ago           Exited (0) 4 days ago                                             exciting_austin
+eebb2b9df484   ubuntu            "bash"                   4 days ago           Exited (0) 4 days ago                                             sad_greider
+482295808c57   ubuntu            "bash"                   4 days ago           Exited (0) 4 days ago                                             elastic_bhaskara
+
+8. Find out the "Full" containerId of the container and write it below.
+
+docker inspect nginx
+"Id": "72916128dfb9b807523aca02f298d43c76312caca5e50600dcb7b4e2998b12b1"
+
+9. Find out how many image layers are used to build this image.
+
+C:\Users\ramka>docker inspect 08b152afcfae
+ "Type": "layers",
+            "Layers": [
+                "sha256:814bff7343242acfd20a2c841e041dd57c50f0cf844d4abd2329f78b992197f4",
+                "sha256:7c0b223167b96d7deaacf1e1d2d35892166645b09b17bcc8675a4d882ef84893",
+                "sha256:59b01b87c9e7f668b740d23eb872c5964636c33aef795f1186f08b172197bc35",
+                "sha256:988d9a3509bbb7ea8037d4eba3a5e0ada5dc165144c8ff0df89c0048d1ac6132",
+                "sha256:b857347059916922b353147882544f17bb96e64c639081c0677bf386c446be4f",
+                "sha256:e3135447ca3e69c6975aee1621c406e3865e0e143c807bbdcf05abefa56054a2"
+
+10. Get the Apache Tomcat 7 server image from the docker hub.
+
+C:\Users\ramka>docker pull tomcat:7.0
+7.0: Pulling from library/tomcat
+
+11. Run the Apache Tomcat 7, I mean create a container of Apache Tomcat.
+docker run -it --rm -p 8888:8080 tomcat:7.0
+
+12. Find out what is the IP Address of the Apache Tomcat Container that it is running on
+
+C:\Users\ramka>docker inspect 9b42f27d9200
+
+
+13. Which Port it is using?
+
+"HostPort": "8888"
+
+14. Try to access the Tomcat's home page from your machine/vm.
+
+competed
+
+15. What is the disk size of Apache Tomcat image?
+
+tomcat            7.0         9dfd74e6bc2f   3 weeks ago    533MB
+
+16. Find out list of all environment variables that is configured for tomcat image, can you see JAVA_HOME and CATALINA_HOME? What did you notice about it?
+"Env": [
+                "PATH=/usr/local/tomcat/bin:/usr/local/openjdk-8/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "JAVA_HOME=/usr/local/openjdk-8",
+                "LANG=C.UTF-8",
+                "JAVA_VERSION=8u292",
+                "CATALINA_HOME=/usr/local/tomcat",
+                "TOMCAT_NATIVE_LIBDIR=/usr/local/tomcat/native-jni-lib",
+                "LD_LIBRARY_PATH=/usr/local/tomcat/native-jni-lib",
+                "GPG_KEYS=05AB33110949707C93A279E3D3EFE6B686867BA6 07E48665A34DCAFAE522E5E6266191C37C037D42 47309207D818FFD8DCD3F83F1931D684307A10A5 541FBE7D8F78B25E055DDEE13C370389288584E7 61B832AC2F1C5A90F0F9B00A1C506407564C17A3 713DA88BE50911535FE716F5208B0AB1D63011C7 79F7026C690BAA50B92CD8B66A3AD3F4F22C4FED 9BA44C2621385CB966EBA586F72C284D731FABEE A27677289986DB50844682F8ACB77FC2E86E29AC A9C5DF4D22E99998D9875A5110C01C5A2F6059E7 DCFD35E0BF8CA7344752DE8B6FB21E8933C60243 F3A04C595DB5B6A5F1ECA43E3B7BBB100D811BBE F7DA48BB64BCB84ECBA7EE6935CD23C10D498E23",
+                "TOMCAT_MAJOR=7",
+                "TOMCAT_VERSION=7.0.109",
+                "TOMCAT_SHA512=612e830913bf1401bc9540e2273e465b0ee7ef63750a9969a80f1e9da9edb4888aa621fcc6fa5ba23cff94a40e91eb97e3f969b8064dabd49b2d0ea29e59b57e"
+            ],
+
+
+17. Find out which port is exposed for tomcat?
+
+default 8080 canged 8888
+
+18. Run multiple conntainers of tomcat on different port and access it's home page.
+
+completed
+
+19. Pull ubuntu os from dockerhub, try to pull 2 images of ubuntu, Except the latest one.
+
+C:\Windows\system32>docker pull ubuntu:20.10
+20.10: Pulling from library/ubuntu
+32f3531c8415: Pull complete
+
+C:\Windows\system32>docker pull ubuntu:18.04
+18.04: Pulling from library/ubuntu
+feac53061382: Pull complete
+
+20. Run the container of ubuntu in attached mode.
+
+C:\Users\ramka>docker run -it --name ubuntuver_20.10 ubuntu:20.10 bash
+root@cebaf7feedbc:/# 
+
+21. Run the container of another ubuntu in detached mode.
+
+C:\Users\ramka>docker run -d -it --name ubuntuver_18.04 ubuntu:18.04 bash
+32740232b3c09322fcf0cdf8fbb9c573fc49ff222cf0a2a22820465dd87a793d
+
+22. Check how many ubuntu containers are running and stopped
+
+C:\Users\ramka>docker ps -a
+CONTAINER ID   IMAGE             COMMAND                  CREATED          STATUS                           PORTS                                   NAMES
+32740232b3c0   ubuntu:18.04      "bash"                   5 minutes ago    Up 5 minutes                                                             ubuntuver_18.04
+cebaf7feedbc   ubuntu:20.10      "bash"                   13 minutes ago   Exited (130) 6 minutes ago                                               ubuntuver_20.10
+
+23. Is the tomcat container running? If no, start one.
+
+C:\Users\ramka>docker run -it --rm -p 8888:8080 tomcat:7.0
+Using CATALINA_BASE:   /usr/local/tomcat
+Using CATALINA_HOME:   /usr/local/tomcat
+Using CATALINA_TMPDIR: /usr/local/tomcat/temp
+Using JRE_HOME:        /usr/local/openjdk-8
+Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
+Using CATALINA_OPTS:
+
+24. Check the logs, generated by tomcat container(don't forget to make request to tomcat's home page to see the log).
+
+C:\Windows\system32>docker logs b28db213b230
+Using CATALINA_BASE:   /usr/local/tomcat
+Using CATALINA_HOME:   /usr/local/tomcat
+Using CATALINA_TMPDIR: /usr/local/tomcat/temp
+Using JRE_HOME:        /usr/local/openjdk-8
+
+25. Check if ubuntu conatiner is running? If no, start one in attached mode to the terminal.
+
+C:\Windows\system32>docker exec -it ubuntuver_18.04 bash
+root@32740232b3c0:/#
+
+26. Login as root user in ubuntu container
+
+Completed 
+root@32740232b3c0:/#
+root@32740232b3c0:/# pwd
+/
+
+27. Create a file with any name in root directory
+
+
+root@32740232b3c0:/# touch assignment.txt
+root@32740232b3c0:/# ls
+assignment.txt  bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+
+28. Install software of your choice in ubuntu container using "apt-get install"
+
+root@32740232b3c0:/# apt-get install python
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+
+
+29. Now exit the ubuntu shell, are you back to your host machine, if not, come back to the host machine.
+
+root@32740232b3c0:/# exit
+exit
+
+C:\Windows\system32>
+
+30. Check if the ubuntu container is running.
+
+
+C:\Windows\system32>docker ps
+CONTAINER ID   IMAGE          COMMAND             CREATED          STATUS          PORTS                                       NAMES
+32740232b3c0   ubuntu:18.04   "bash"              30 minutes ago   Up 30 minutes                                               ubuntuver_18.04
+
+31. Create a new ubuntu container out of the same image as that previous container in attached mode.
+
+C:\Windows\system32>docker run -it --name ubuntu-2-18.04 ubuntu:18.04 bash
+root@55041476ceb2:/#
+
+32. Login as a root user
+
+Completed 
+C:\Windows\system32>docker run -it --name ubuntu-2-18.04 ubuntu:18.04 bash
+root@55041476ceb2:/# pwd
+/
+
+33. Check if you can see the file created in previous container, you will not see the file as well as software that you installed in the previous container. Now kill this Container.
+
+File not found
+root@55041476ceb2:/# ls
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+
+34. Do you have the previous ubuntu container where you created the file and installed the software? If no reapeat step 25 to 29.
+
+Yes the previous ubuntu container is running and the created file and softwares are present in the container
+
+C:\Windows\system32>docker exec -it ubuntuver_18.04 bash
+root@32740232b3c0:/# ls
+assignment.txt  bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+
+35. Create an Image out of the existing container.
+
+C:\Windows\system32>docker container commit --author "Ramkumar" 32740232b3c0 my-ubuntu-image
+sha256:f47773d19fa62f357e9926a7eda12a9f795f40fbb6933592e7dcd7df975c8115
+
+36. Now Create a Container out of this image and login into it to see if you can see the file and software installed by you in the previous container.
+
+Yes the ubuntu container is running and the created file and softwares are present in the container
+C:\Windows\system32>docker run -it --name ubuntucontainer-fromimage my-ubuntu-image bash
+root@a7e323220a03:/# ls
+assignment.txt  bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@a7e323220a03:/#
+
+37. Do you have running tomcat container? If yes, Stop it and kill all tomcat container.
+
+Yes
+
+C:\Windows\system32>docker ps
+CONTAINER ID   IMAGE          COMMAND             CREATED          STATUS          PORTS                                       NAMES
+b28db213b230   tomcat:7.0     "catalina.sh run"   43 minutes ago   Up 43 minutes   0.0.0.0:8888->8080/tcp, :::8888->8080/tcp   ecstatic_lalande
+
+C:\Windows\system32>docker stop b28db213b230
+b28db213b230
+
+
+38. Create an index.html file with following code in it:-
+	<h1>This is Tomcat Container</h1>
+Now, Start a tomcat container in such a way that on hitting its URL for home page it should show the above html page.
+
+C:\Windows\system32>docker run -p 9290:8080 tomcat:latest
+
+C:\Users\ramka>docker exec -it 22428a9e7f33 bash
+root@22428a9e7f33:/usr/local/tomcat# ls
+BUILDING.txt  CONTRIBUTING.md  LICENSE  NOTICE  README.md  RELEASE-NOTES  RUNNING.txt  bin  conf  lib  logs  native-jni-lib  temp  webapps  webapps.dist  work
+root@22428a9e7f33:/usr/local/tomcat# cd webapps
+root@22428a9e7f33:/usr/local/tomcat/webapps# ls
+root@22428a9e7f33:/usr/local/tomcat/webapps# cd ../
+root@22428a9e7f33:/usr/local/tomcat# cp -R webapps.dist/. webapps
+root@22428a9e7f33:/usr/local/tomcat# cd webapps
+root@22428a9e7f33:/usr/local/tomcat/webapps# ls
+ROOT  docs  examples  host-manager  manager
+root@22428a9e7f33:/usr/local/tomcat/webapps# mkdir demo
+root@22428a9e7f33:/usr/local/tomcat/webapps# cd demo
+root@22428a9e7f33:/usr/local/tomcat/webapps/demo# touch index.html
+root@22428a9e7f33:/usr/local/tomcat/webapps/demo# vi index.html
+root@22428a9e7f33:/usr/local/tomcat/webapps/demo# cat index.html
+<h1>This is TomcatContainer</h1>
+
+Tomcat url
+http://localhost:9290/demo/index.html
+
+39. type below command:-
+	docker images --help
+Now, try to run command that proves the concept of following three options:-
+1. -a
+2. -f
+3. -q
+
+write atleast 1 command using each option above and prove their concepts as described in the --help.
+
+-a, --all             Show all images (default hides intermediate images)
+      --digests         Show digests
+  -f, --filter filter   Filter output based on conditions provided
+      --format string   Pretty-print images using a Go template
+      --no-trunc        Don't truncate output
+  -q, --quiet           Only show image IDs
+
+
+1.
+C:\Windows\system32>docker images -a
+REPOSITORY        TAG         IMAGE ID       CREATED         SIZE
+my-ubuntu-image   latest      f47773d19fa6   9 minutes ago   63.1MB
+myimage1          1.0         a5c24d1d92e7   3 days ago      102MB
+ubuntu            20.10       e508bd6d694e   4 days ago      79.4MB
+ubuntu            18.04       39a8cfeef173   4 days ago      63.1MB
+redis             latest      aa4d65e670d6   7 days ago      105MB
+
+2.
+C:\Windows\system32>docker images -f "dangling=false"
+REPOSITORY        TAG         IMAGE ID       CREATED          SIZE
+my-ubuntu-image   latest      f47773d19fa6   19 minutes ago   63.1MB
+myimage1          1.0         a5c24d1d92e7   3 days ago       102MB
+ubuntu            20.10       e508bd6d694e   4 days ago       79.4MB
+ubuntu            18.04       39a8cfeef173   4 days ago       63.1MB
+redis             latest      aa4d65e670d6   7 days ago       105MB
+
+3.
+C:\Windows\system32>docker images -q
+f47773d19fa6
+a5c24d1d92e7
+e508bd6d694e
+39a8cfeef173
+aa4d65e670d6
+
+40. type below command:-
+	docker ps --help
+Now, try to run command that proves the concept of following six options:-
+1. -a
+2. -f
+3. -q
+4. -n
+5. -l
+6. -s
+
+Options:
+  -a, --all             Show all containers (default shows just running)
+  -f, --filter filter   Filter output based on conditions provided
+      --format string   Pretty-print containers using a Go template
+  -n, --last int        Show n last created containers (includes all
+                        states) (default -1)
+  -l, --latest          Show the latest created container (includes all
+                        states)
+      --no-trunc        Don't truncate output
+  -q, --quiet           Only display container IDs
+  -s, --size            Display total file sizes
+
+1.
+docker ps -a
+CONTAINER ID   IMAGE             COMMAND                  CREATED             STATUS                           PORTS                                   NAMES
+a7e323220a03   my-ubuntu-image   "bash"                   17 minutes ago      Exited (0) 16 minutes ago                                                ubuntucontainer-fromimage
+55041476ceb2   ubuntu:18.04      "bash"                   34 minutes ago      Exited (0) 31 minutes ago                                                ubuntu-2-18.04
+9611b3388738   ubuntu:18.04      "bash"                   35 minutes ago      Exited (0) 35 minutes ago                                                ubuntu-duplicate
+32740232b3c0   ubuntu:18.04      "bash"                   About an hour ago   Up About an hour                                                         ubuntuver_18.04
+cebaf7feedbc   ubuntu:20.10      "bash"                   About an hour ago   Exited (130) About an hour ago                                           ubuntuver_20.10
+
+2.
+C:\Windows\system32>docker ps -f status=running
+CONTAINER ID   IMAGE          COMMAND   CREATED             STATUS             PORTS     NAMES
+32740232b3c0   ubuntu:18.04   "bash"    About an hour ago   Up About an hour             ubuntuver_18.04
+
+3.
+C:\Windows\system32>docker ps -q
+32740232b3c0
+
+4.
+C:\Windows\system32>docker ps -n -1
+CONTAINER ID   IMAGE          COMMAND   CREATED             STATUS             PORTS     NAMES
+32740232b3c0   ubuntu:18.04   "bash"    About an hour ago   Up About an hour             ubuntuver_18.04
+
+5.
+C:\Windows\system32>docker ps -l
+CONTAINER ID   IMAGE             COMMAND   CREATED          STATUS                      PORTS     NAMES
+a7e323220a03   my-ubuntu-image   "bash"    24 minutes ago   Exited (0) 22 minutes ago             ubuntucontainer-fromimage
+
+6.
+
+C:\Windows\system32>docker ps -s
+CONTAINER ID   IMAGE          COMMAND   CREATED             STATUS             PORTS     NAMES             SIZE
+32740232b3c0   ubuntu:18.04   "bash"    About an hour ago   Up About an hour             ubuntuver_18.04   226B (virtual 63.1MB)

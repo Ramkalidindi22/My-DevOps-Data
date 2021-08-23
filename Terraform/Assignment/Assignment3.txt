@@ -1,0 +1,136 @@
+3.
+Adding Maps and Lookups in your Terraform files
+The lab files can be found @ https://github.com/satyensingh/terraform-assignment-resources.git
+In the repo you will find main.tf, outputs.tf, and variables.tf.
+Add a new variable called env. Set a description to “env: dev or prod”.
+Convert the type from image_name to map.
+
+Change the default to use key/value pairs. Set dev to ghost:latest and prod to ghost:alpine.
+
+Convert container_name to a map. Change the default to use key/value pairs. Set dev to blog_dev and prod to blog_prod.
+
+Convert ext_port to a map. Change the default to use key/value pairs. Set dev to 8080 and prod to 80.
+
+Now initialize Terraform.
+
+Setup the Development environment
+Create a workspace called dev.
+Generate a Terraform plan. Output the plan and call it tfdev_plan. Pass in a variable called env and set it to dev.
+Apply tfdev_plan.
+
+Setup the Production environment
+Create a workspace called prod.
+Generate a Terraform plan. Output the plan and call it tfprod_plan. Pass in a variable called env and set it to prod.
+Apply tfprod_plan.
+
+Verify both environments work
+Open a browser and navigate to the public IP. This should pull up the production environment.
+Open a browser tab and navigate to the public IP on port 8080. This should pull up the development environment.
+
+A.
+To start with we need to set up the environment:
+$mkdir terraform/
+$cd terraform/
+$vi variables.tf
+# Define variables
+variable "environment" {
+  description = "env: production or development"
+}
+
+variable "image_name" {
+  type = "map"
+  description = "Image name for container"
+  default = {
+    prod = "ghost:alpine"
+    dev = "ghost:default"
+  }
+}
+
+variable "container_name" {
+  type = "map"
+  description = "Name of the container"
+  default = {
+    prod = "container_production"
+    dev = "container_development"
+  }
+}
+
+variable "internal_port" {
+  description = "Internal port for container"
+  default = "2368"
+}
+
+variable "external_port" {
+  type = "map"
+  description = "External port for container"
+  default {
+    prod = "80"
+    dev = "8081"
+  }
+}
+$vi main.tf
+# Download the latest Ghost image
+resource "docker_image" "image_id" {
+  name = "${lookup(var.image_name)}"
+}
+
+# Start the Container
+resource "docker_container" "container_id" {
+  name  = "${lookup(var.container_name)}"
+  image = "${docker_image.image_id.latest}"
+  ports {
+    internal = "${var.internal_port}"
+    external = "${lookup(var.external_port)}"
+  }
+}
+$terraform init
+$terraform validate
+$terraform plan -out=tfdev_plan -var env=development
+$terraform apply tfdev_plan
+Confirm your apply by typing yes. The apply will take a bit to complete.
+$docker images ls
+
+$vi main.tf
+# Download the latest Ghost image
+resource "docker_image" "image_id" {
+  name = "${lookup(var.image_name)}"
+}
+
+# Start the Container
+resource "docker_container" "container_id" {
+  name  = "${lookup(var.container_name)}"
+  image = "${docker_image.image_id.latest}"
+  ports {
+    internal = "${var.internal_port}"
+    external = "${lookup(var.external_port)}"
+  }
+}
+$terraform init
+$terraform validate
+$terraform plan -out=tfprod_plan -var env=production
+$terraform apply tfprod_plan
+Confirm your apply by typing yes. The apply will take a bit to complete.
+$docker images ls
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,8 @@
+4. Strings and GroovyStrings
+a. How many characters are in the string "Hello, Groovy!"?
+
+str = "Hello, Groovy!"
+println str.length()
+
+o/p:
+14
